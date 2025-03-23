@@ -19,6 +19,8 @@ RCMS es una API desarrollada en ASP.NET 9.0 que permite gestionar piezas, distri
 
 - Categorías 🏷️: Organiza las piezas por categorías (motor, chasis, electrónica, etc.).
 
+- Usuarios 👤 : Controla el acceso de usuarios, actualiza sus datos o desactivalo en el sistema.
+
 API RESTful 🌐: Endpoints bien definidos para integración con otros sistemas.
 
 🚀 Cómo Empezar
@@ -111,6 +113,17 @@ Categorías (Categories) 🏷️
 
 - DELETE /api/categories/{id}: Eliminar una categoría.
 
+Usuarios (Users) 👤
+
+- POST /api/users/register: Registrar un nuevo usuario en BD
+
+- POST /api/users/login: Iniciar sesión y obtener un JWT
+
+- GET /api/users: Obtener una lista de todos los usuarios (funcionalidad exclusiva de usuarios con rol de administrador)
+
+- PUT /api/users/{id}: Permite actualizar los datos de un usuario (funcionalidad exclusiva de administradores y propio usuario)
+
+- DELETE /api/users/{id}: Desactiva un usuario (funcionalidad exclusiva para administradores)
 
 📄 Licencia  
 Este proyecto está bajo la licencia MIT. Para más detalles, consulta el archivo LICENSE.
