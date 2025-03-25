@@ -1,14 +1,27 @@
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using RCMS.Application.Services;
 using RCMS.Infrastructure;
+using RCMS.Infrastructure.Interfaces;
 using RCMS.Infrastructure.Persistance;
-using RCMS.WebApi.AuthMiddleware;
+using RCMS.Infrastructure.Repositories;
+using RCMS.Interfaces;
+using RCMS.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+// Add services to the dependency injection container
+builder.Services.AddScoped<IPartsRepository, PartsRepository>();
+builder.Services.AddScoped<PartsMapper>();
+builder.Services
+    .AddScoped<IPartsService>(
+        (serviceProvider) => new PartsService(
+            serviceProvider.GetService<IPartsRepository>(),
+            serviceProvider.GetService<PartsMapper>()
+        ));
+
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -61,10 +74,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 var environment = builder.Environment.EnvironmentName;
 Console.WriteLine($"Entorno actual: {environment}");
 
-app.UseMiddleware<ApiKeyAuthMiddleware>();
+// app.UseMiddleware<ApiKeyAuthMiddleware>();
 
 app.UseAuthorization();
 

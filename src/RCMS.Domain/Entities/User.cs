@@ -1,8 +1,10 @@
-﻿namespace RCMS.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RCMS.Domain.Entities;
 
 public class User
 {
-    public Guid Id { get; set; }
+    public int Id{ get; set; }
     public required string Name { get; set; }
     public string ? FirstName { get; set; }
     public required string Email { get; set; }
@@ -11,4 +13,6 @@ public class User
     public required string Role { get; set; }
     public DateTime CreationDate { get; set; } = DateTime.Now;
     public bool IsActive { get; set; }
+    
+    public ICollection<Inventory> Inventories { get; set; } = new List<Inventory>();
 }

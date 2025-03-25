@@ -23,6 +23,10 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<Part>()
+            .Property(p => p.Price)
+            .HasPrecision(18,2);
+        
+         modelBuilder.Entity<Part>()
             .HasOne(p => p.Supplier)
             .WithMany(c => c.Parts)
             .HasForeignKey(p => p.SupplierId)
@@ -32,6 +36,12 @@ public class AppDbContext : DbContext
             .HasOne(i => i.Part)
             .WithMany(p => p.Inventory)
             .HasForeignKey(i => i.PartId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Inventory>()
+            .HasOne(i => i.User)
+            .WithMany(u => u.Inventories)
+            .HasForeignKey(i => i.UserId)
             .OnDelete(DeleteBehavior.Cascade);
         
         base.OnModelCreating(modelBuilder);

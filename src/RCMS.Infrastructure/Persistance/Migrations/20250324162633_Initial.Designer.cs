@@ -12,8 +12,8 @@ using RCMS.Infrastructure.Persistance;
 namespace RCMS.Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250323154722_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250324162633_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,14 +70,11 @@ namespace RCMS.Infrastructure.Persistance.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PartId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Inventory");
                 });
@@ -105,6 +102,7 @@ namespace RCMS.Infrastructure.Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Stock")
@@ -157,9 +155,11 @@ namespace RCMS.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("RCMS.Domain.Entities.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -204,8 +204,8 @@ namespace RCMS.Infrastructure.Persistance.Migrations
                         .IsRequired();
 
                     b.HasOne("RCMS.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1")
+                        .WithMany("Inventories")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -246,6 +246,11 @@ namespace RCMS.Infrastructure.Persistance.Migrations
             modelBuilder.Entity("RCMS.Domain.Entities.Supplier", b =>
                 {
                     b.Navigation("Parts");
+                });
+
+            modelBuilder.Entity("RCMS.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Inventories");
                 });
 #pragma warning restore 612, 618
         }
