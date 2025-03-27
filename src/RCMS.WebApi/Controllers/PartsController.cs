@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RCMS.Application.Services;
+using RCMS.DTOs;
 using RCMS.Exceptions;
 using RCMS.Interfaces;
 
@@ -54,22 +55,19 @@ namespace RCMS.WebApi.Controllers
 
             }
         }
-
-        // [Route("addParts")]
-        // [HttpPost]
-        // public IActionResult AddParts(Part partDto)
-        // {
-        //     var partEntity = new Part()
-        //     {
-        //         Name = partDto.Name,
-        //         Price = partDto.Price,
-        //         Stock = partDto.Stock
-        //     };
-        //     _dbContext.Parts.Add(partEntity);
-        //     _dbContext.SaveChanges();
-        //
-        //     string result = JsonConvert.SerializeObject(partEntity, Formatting.Indented);
-        //     return Ok($"The part\n {result}\n has been added");
-        // }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddParts(PartDto partDto)
+        {
+            try
+            {
+                var result = await _partsService.CreatePartAsync(partDto);
+                return Created("The product has been created successfully!\n\nProduct:\n", result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An unexpected error occured. Exception: {ex.Message}");
+            }
+        }
     }
 }  

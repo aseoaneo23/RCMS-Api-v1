@@ -7,6 +7,7 @@ using RCMS.Infrastructure.Persistance;
 using RCMS.Infrastructure.Repositories;
 using RCMS.Interfaces;
 using RCMS.Mappers;
+using RCMS.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,8 @@ builder.Services
     .AddScoped<IPartsService>(
         (serviceProvider) => new PartsService(
             serviceProvider.GetService<IPartsRepository>(),
-            serviceProvider.GetService<PartsMapper>()
+            serviceProvider.GetService<PartsMapper>(),
+            serviceProvider.GetService<Sanitizer>()
         ));
 
 

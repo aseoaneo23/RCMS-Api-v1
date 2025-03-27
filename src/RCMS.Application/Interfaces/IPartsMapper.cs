@@ -7,4 +7,6 @@ public interface IPartsMapper
 { 
     PartDto ToPartDto (Part part);
     
+    Part ToPartEntity(PartDto partDto);
+    
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RCMS.Domain.Entities;
 using RCMS.Infrastructure.Interfaces;
 using RCMS.Infrastructure.Persistance;
@@ -22,5 +23,15 @@ public class PartsRepository : IPartsRepository
     public async Task<Part?> GetPartByIdAsync(int partId)
     {
         return await _dbContext.Parts.FindAsync(partId);
+    }
+    
+    public async Task<Part?> GetPartByNameAsync(string partName)
+    {
+        return await _dbContext.Parts.FirstOrDefaultAsync(p => p.Name == partName);
+    }
+
+    public async Task<EntityEntry<Part>> AddPartAsync(Part part)
+    {
+        return await _dbContext.Parts.AddAsync(part);
     }
 }
